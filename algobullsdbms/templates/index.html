@@ -1,0 +1,276 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Select Roles {% block title %}{% endblock title %}</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <a href="#">Algobulls</a>
+    {% block content %}
+    <div>
+        <nav aria-label="breadcrumb">
+            <ol>
+                <li>
+                    <a href="">Roles</a>
+                </li>
+                <li>
+                    Select Roles
+                </li>
+            </ol>
+        </nav>
+    </div>
+    <div>
+        <button onclick="showTables('Support Head')">Support Head</button>
+        <button onclick="showTables('Support Employee')">Support Employee</button>
+        <table id="roles-table" class="hidden">
+            <thead>
+                <tr>
+                    <th>Role ID</th>
+                    <th>Role Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for role in roles %}
+                    <tr>
+                        <td>{{ role.role_id }}</td>
+                        <td>{{ role.role_name }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table id="issue-history-table" class="hidden">
+            <thead>
+                <tr>
+                    <th>History ID</th>
+                    <th>Issue ID</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Comment</th>
+                    <th>Assigned To</th>
+                    <th>Changed By</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for history in issue_histories %}
+                <tr>
+                    <td>{{ history.history_id }}</td>
+                    <td>{{ history.issue_id }}</td>
+                    <td>{{ history.date }}</td>
+                    <td>{{ history.status }}</td>
+                    <td>{{ history.comment }}</td>
+                    <td>{{ history.assigned_to }}</td>
+                    <td>{{ history.changed_by }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table id="issues-table" class="hidden">
+            <!-- Issues Table Content -->
+            <thead>
+                <tr>
+                    <th>Issue ID</th>
+                    <th>Division Assigned To</th>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Contact Number</th>
+                    <th>Broking ID</th>
+                    <th>Email ID</th>
+                    <th>Strategy Code</th>
+                    <th>Strategy Instrument</th>
+                    <th>Customer Type</th>
+                    <th>Priority</th>
+                    <th>Issue</th>
+                    <th>Comment</th>
+                    <th>Status</th>
+                    <th>Date of Closing</th>
+                    <th>Branch Employee ID</th>
+                    <th>Employee Assigned To</th>
+                    <th>Sales Employee Assigned To</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for issue in issues %}
+                <tr>
+                    <td>{{ issue.issue_id }}</td>
+                    <td>{{ issue.division_assigned_to }}</td>
+                    <td>{{ issue.date }}</td>
+                    <td>{{ issue.name }}</td>
+                    <td>{{ issue.contact_number }}</td>
+                    <td>{{ issue.broking_id }}</td>
+                    <td>{{ issue.email_id }}</td>
+                    <td>{{ issue.strategy_code }}</td>
+                    <td>{{ issue.strategy_instrument }}</td>
+                    <td>{{ issue.customer_type }}</td>
+                    <td class="editable-priority" contenteditable="true">{{ issue.priority }}</td>
+                    <td>{{ issue.issue }}</td>
+                    <td class="editable-comment" contenteditable="true">{{ issue.comment }}</td>
+                    <td>{{ issue.status }}</td>
+                    <td>{{ issue.date_of_closing }}</td>
+                    <td>{{ issue.branch_employee_id }}</td>
+                    <td class="issue-id hidden">{{ issue.issue_id }}</td>
+                    <td class="editable" contenteditable="true">{{ issue.employee_assigned_to }}</td>
+                    <td>{{ issue.sales_employee_assigned_to }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <form id="update-form" class="hidden" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="updated_values" id="updated-values">
+            <button type="button" onclick="submitValues()">Submit Employee Assigned To</button>
+            <button onclick="submitPriority()">Submit Priority</button>
+            <button type="button" onclick="submitComments()">Submit Comments</button>
+        </form>
+        <form id="update-comments-form" class="hidden" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="updated_comments" id="updated-comments">
+            <button type="button" onclick="submitComments()">Submit Comments</button>
+        </form>        
+    </div>
+    {% endblock content %}
+</header>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function showTables(role) {
+        var issueHistoryTable = document.getElementById('issue-history-table');
+        var issuesTable = document.getElementById('issues-table');
+        var rolesTable = document.getElementById('roles-table');
+        var submitForm = document.getElementById('update-form');
+        var editableCells = document.querySelectorAll('.editable');
+
+        if (role === 'Support Head') {
+            issueHistoryTable.classList.remove('hidden');
+            issuesTable.classList.remove('hidden');
+            rolesTable.classList.remove('hidden');
+            submitForm.classList.remove('hidden');
+            editableCells.forEach(function(cell) {
+                cell.contentEditable = true;
+            });
+        } else if (role === 'Support Employee') {
+            issueHistoryTable.classList.add('hidden');
+            issuesTable.classList.remove('hidden');
+            rolesTable.classList.remove('hidden');
+            submitForm.classList.add('hidden');
+            editableCells.forEach(function(cell) {
+                cell.contentEditable = false;
+            });
+        }
+    }
+
+    function submitValues() {
+        var editableCells = document.querySelectorAll('.editable');
+        var updatedValues = {};
+    
+        // Iterate over all editable cells and gather their values
+        editableCells.forEach(function(cell) {
+            var issueId = cell.parentElement.querySelector('.issue-id').innerText.trim();
+            var newValue = cell.innerText.trim();
+            updatedValues[issueId] = newValue;
+        });
+    
+        // Serialize the updatedValues object and send it to the server
+        $.ajax({
+            url: '/update_employee_assigned_to/',
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            data: {
+                'updated_values': JSON.stringify(updatedValues)
+            },
+            success: function(response) {
+                console.log('Column updated successfully:', response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error updating column:', error);
+            }
+        });
+    }   
+    
+    function submitPriority() {
+        var editablePriorities = document.querySelectorAll('.editable-priority');
+        var updatedPriorities = {};
+    
+        editablePriorities.forEach(function(cell) {
+            var issueId = cell.parentElement.querySelector('.issue-id').innerText.trim();
+            var newValue = cell.innerText.trim();
+            updatedPriorities[issueId] = newValue;
+        });
+    
+        var csrftoken = getCookie('csrftoken');
+    
+        $.ajax({
+            url: '/update_priority/',
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            data: {
+                'updated_priorities': JSON.stringify(updatedPriorities)
+            },
+            success: function(response) {
+                console.log('Priority values updated successfully:', response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error updating priority values:', error);
+            }
+        });
+    }
+
+    function submitComments() {
+        var editableComments = document.querySelectorAll('.editable-comment');
+        var updatedComments = {};
+    
+        editableComments.forEach(function(cell) {
+            var issueId = cell.parentElement.querySelector('.issue-id').innerText.trim();
+            var newComment = cell.innerText.trim();
+            updatedComments[issueId] = newComment;
+        });
+    
+        document.getElementById('updated-comments').value = JSON.stringify(updatedComments);
+    
+        var csrftoken = getCookie('csrftoken');
+    
+        $.ajax({
+            url: '/update_comments/',
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            data: $('#update-comments-form').serialize(),
+            success: function(response) {
+                console.log('Comments updated successfully:', response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error updating comments:', error);
+            }
+        });
+    }
+    
+    
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+
+</body>
+</html>

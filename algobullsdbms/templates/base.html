@@ -1,0 +1,520 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Select Roles {% block title %}{% endblock title %}</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <a href="#">Algobulls</a>
+    {% block content %}
+    <div>
+        <nav aria-label="breadcrumb">
+            <ol>
+                <li>
+                    <a href="">Roles</a>
+                </li>
+                <li>
+                    Select Roles
+                </li>
+            </ol>
+        </nav>
+    </div>
+    <div>
+        <p>User Details:</p>
+        <p>Employee ID: {{ employee_id }}</p>
+        <button onclick="showTables('Support Head')">Support Head</button>
+        <button onclick="showTables('Support Employee')">Support Employee</button>
+        <button onclick="showTables('Sales Head')">Sales Head</button>
+        <button onclick="showTables('Sales Employee 111')">Sales Employee 111</button>
+        <button onclick="showTables('Sales Employee 222')">Sales Employee 222</button>
+        <button onclick="showTables('Branch Employee 11')">Branch Employee 11</button>
+        <table id="roles-table" class="hidden">
+            <thead>
+                <tr>
+                    <th>Role ID</th>
+                    <th>Role Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for role in roles %}
+                    <tr>
+                        <td>{{ role.role_id }}</td>
+                        <td>{{ role.role_name }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table id="issue-history-table" class="hidden">
+            <thead>
+                <tr>
+                    <th>History ID</th>
+                    <th>Issue ID</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Comment</th>
+                    <th>Assigned To</th>
+                    <th>Changed By</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for history in issue_histories %}
+                <tr>
+                    <td>{{ history.history_id }}</td>
+                    <td>{{ history.issue_id }}</td>
+                    <td>{{ history.date }}</td>
+                    <td>{{ history.status }}</td>
+                    <td>{{ history.comment }}</td>
+                    <td>{{ history.assigned_to }}</td>
+                    <td>{{ history.changed_by }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table id="issues-table" class="hidden">
+            <!-- Issues Table Content -->
+            <thead>
+                <tr>
+                    <th>Issue ID</th>
+                    <th>Division Assigned To</th>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Contact Number</th>
+                    <th>Broking ID</th>
+                    <th>Email ID</th>
+                    <th>Strategy Code</th>
+                    <th>Strategy Instrument</th>
+                    <th>Customer Type</th>
+                    <th>Priority</th>
+                    <th>Issue</th>
+                    <th>Comment</th>
+                    <th>Status</th>
+                    <th>Date of Closing</th>
+                    <th>Branch Employee ID</th>
+                    <th>Employee Assigned To</th>
+                    <th>Sales Employee Assigned To</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for issue in issues %}
+                <tr>
+                    <td>{{ issue.issue_id }}</td>
+                    <td>{{ issue.division_assigned_to }}</td>
+                    <td>{{ issue.date }}</td>
+                    <td>{{ issue.name }}</td>
+                    <td>{{ issue.contact_number }}</td>
+                    <td>{{ issue.broking_id }}</td>
+                    <td>{{ issue.email_id }}</td>
+                    <td>{{ issue.strategy_code }}</td>
+                    <td>{{ issue.strategy_instrument }}</td>
+                    <td>{{ issue.customer_type }}</td>
+                    <td class="editable-priority" contenteditable="false">{{ issue.priority }}</td>
+                    <td class="editable-issue" contenteditable="true">{{ issue.issue }}</td>
+                    <td class="editable-comment" contenteditable="true">{{ issue.comment }}</td>
+                    <td class="editable-status" contenteditable="true">{{ issue.status }}</td>
+                    <td class="editable-date_of_closing" contenteditable="true">{{ issue.date_of_closing }}</td>
+                    <td class="editable-branch_employee_id" contenteditable="true">{{ issue.branch_employee_id }}</td>
+                    <td class="issue-id hidden">{{ issue.issue_id }}</td>
+                    <td class="editable" contenteditable="true">{{ issue.employee_assigned_to }}</td>
+                    <td class="editable-sales_employee_assigned_to" contenteditable="true">{{ issue.sales_employee_assigned_to }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table id="sales-leads-table" class="hidden">
+            <thead>
+                <tr>
+                    <th>Lead ID</th>
+                    <th>Branch Employee ID</th>
+                    <th>Sales Employee ID</th>
+                    <th>Broking ID</th>
+                    <th>Name</th>
+                    <th>Contact Number</th>
+                    <th>Email ID</th>
+                    <th>Source Type</th>
+                    <th>Category</th>
+                    <th>Risk Appetite</th>
+                    <th>Comments</th>
+                    <th>Amount</th>
+                    <th>Purchase Date</th>
+                    <th>Status</th>
+                    <th>Reason For Dropped</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lead in sales_leads %}
+                <tr>
+                    <td>{{ lead.lead_id }}</td>
+                    <td>{{ lead.branch_employee_id }}</td>
+                    <td>{{ lead.sales_employee_id }}</td>
+                    <td>{{ lead.broking_id }}</td>
+                    <td>{{ lead.name }}</td>
+                    <td>{{ lead.contact_number }}</td>
+                    <td>{{ lead.email_id }}</td>
+                    <td>{{ lead.source_type }}</td>
+                    <td class="lead-id hidden">{{ lead.lead_id }}</td>
+                    <td class="editable-salesleads" data-field="category" contenteditable="true">{{ lead.category }}</td>
+                    <td class="editable-salesleads" data-field="risk_appetite" contenteditable="true">{{ lead.risk_appetite }}</td>
+                    <td class="editable-salesleads" data-field="comments" contenteditable="true">{{ lead.comments }}</td>
+                    <td class="editable-salesleads" data-field="amount" contenteditable="true">{{ lead.amount }}</td>
+                    <td class="editable-salesleads" data-field="purchase_date" contenteditable="true">{{ lead.purchase_date }}</td>
+                    <td class="editable-salesleads" data-field="status" contenteditable="true">{{ lead.status }}</td>
+                    <td class="editable-salesleads" data-field="reason_for_dropped" contenteditable="true">{{ lead.reason_for_dropped }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <form id="update-form" class="hidden" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="updated_values" id="updated-values">
+            <button type="button" onclick="submitValues()">Submit Employee Assigned To</button>
+            <button type="button" onclick="submitPriority()">Submit Priority</button>
+        </form>
+        <form id="update-comments-form" class="hidden" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="updated_comments" id="updated-comments">
+            <button type="button" onclick="submitComments()">Submit Comments</button>
+        </form>
+        <form id="update-category-form" class="hidden" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="updated_categories" id="updated-categories">
+            <button type="button" onclick="submitCategory()">Submit Category</button>
+        </form>
+        <form id="update-sales-leads-form" class="hidden" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="updated_data" id="updated-data">
+            <button type="button" onclick="submitSalesLeads()">Submit Sales Leads</button>
+        </form>
+        <form id="update-issues-form" class="hidden" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="updated_issues" id="updated-data">
+            <button type="button" onclick="submitIssues()">Submit Issues</button>
+        </form>
+        <form id="new-entry-form" class="hidden" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="updated_row" id="updated-data">
+            <button type="button" onclick="addNewRow()">New Entry</button>
+        </form>
+
+    </div>
+    {% endblock content %}
+</header>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function showTables(role) {
+        var issueHistoryTable = document.getElementById('issue-history-table');
+        var issuesTable = document.getElementById('issues-table');
+        var rolesTable = document.getElementById('roles-table');
+        var salesLeadsTable = document.getElementById('sales-leads-table');
+        var submitForm = document.getElementById('update-form');
+        var submitFormComments = document.getElementById('update-comments-form');
+        var submitFormCategory = document.getElementById('update-category-form');
+        var submitFormSalesLeads = document.getElementById('update-sales-leads-form');
+        var editableCells = document.querySelectorAll('.editable');
+        var editablePriority = document.querySelectorAll('.editable-priority');
+        var newEntryForm = document.getElementById('new-entry-form');
+
+        if (role === 'Support Head') {
+            issueHistoryTable.classList.remove('hidden');
+            issuesTable.classList.remove('hidden');
+            rolesTable.classList.remove('hidden');
+            salesLeadsTable.classList.add('hidden');
+            submitForm.classList.remove('hidden');
+            submitFormCategory.classList.add('hidden');
+            submitFormComments.classList.remove('hidden');
+            submitFormSalesLeads.classList.add('hidden');
+            newEntryForm.classList.add('hidden');
+            editableCells.forEach(function(cell) {
+                cell.contentEditable = true;
+            });
+            editablePriority.forEach(function(cell) {
+                cell.contentEditable = true;
+            });
+        } else if (role === 'Support Employee') {
+            issueHistoryTable.classList.add('hidden');
+            issuesTable.classList.remove('hidden');
+            rolesTable.classList.remove('hidden');
+            salesLeadsTable.classList.add('hidden');
+            submitForm.classList.add('hidden');
+            submitFormComments.classList.remove('hidden');
+            submitFormCategory.classList.add('hidden');
+            submitFormSalesLeads.classList.add('hidden');
+            newEntryForm.classList.add('hidden');
+            editableCells.forEach(function(cell) {
+                cell.contentEditable = false;
+            });
+        } else if (role === 'Sales Head') {
+            issueHistoryTable.classList.add('hidden');
+            issuesTable.classList.add('hidden');
+            rolesTable.classList.remove('hidden');
+            salesLeadsTable.classList.remove('hidden');
+            submitForm.classList.add('hidden');
+            submitFormComments.classList.add('hidden');
+            submitFormCategory.classList.remove('hidden');
+            submitFormSalesLeads.classList.remove('hidden');
+            newEntryForm.classList.add('hidden');
+            var rows = salesLeadsTable.getElementsByTagName('tr');
+            for (var i = 0; i < rows.length; i++) {
+                rows[i].classList.remove('hidden'); // Show all rows
+            }
+            editableCells.forEach(function(cell) {
+                cell.contentEditable = true;
+            });
+        } else if (role === 'Sales Employee 111') {
+            issueHistoryTable.classList.add('hidden');
+            issuesTable.classList.add('hidden');
+            rolesTable.classList.remove('hidden');
+            salesLeadsTable.classList.remove('hidden');
+            submitForm.classList.add('hidden');
+            submitFormComments.classList.add('hidden');
+            submitFormCategory.classList.add('hidden');
+            submitFormSalesLeads.classList.remove('hidden');
+            newEntryForm.classList.add('hidden');
+            var rows = salesLeadsTable.getElementsByTagName('tr');
+            for (var i = 0; i < rows.length; i++) {
+                var employeeIDCell = rows[i].getElementsByTagName('td')[2]; // Assuming Employee ID is the third column
+                if (employeeIDCell && employeeIDCell.innerText.trim() !== 'AlgobullsEmployee object (111)') {
+                    rows[i].classList.add('hidden');
+                } else {
+                    rows[i].classList.remove('hidden');
+                }
+            }
+            editableCells.forEach(function(cell) {
+                cell.contentEditable = true;
+            });
+        } else if (role === 'Sales Employee 222') {
+            issueHistoryTable.classList.add('hidden');
+            issuesTable.classList.add('hidden');
+            rolesTable.classList.remove('hidden');
+            salesLeadsTable.classList.remove('hidden');
+            submitForm.classList.add('hidden');
+            submitFormComments.classList.add('hidden');
+            submitFormCategory.classList.add('hidden');
+            submitFormSalesLeads.classList.remove('hidden');
+            newEntryForm.classList.add('hidden');
+            var rows = salesLeadsTable.getElementsByTagName('tr');
+            for (var i = 0; i < rows.length; i++) {
+                var employeeIDCell = rows[i].getElementsByTagName('td')[2]; // Assuming Employee ID is the third column
+                if (employeeIDCell && employeeIDCell.innerText.trim() !== 'AlgobullsEmployee object (222)') {
+                    rows[i].classList.add('hidden'); // Hide rows where Employee ID is not 222
+                } else {
+                    rows[i].classList.remove('hidden');
+                }
+            }
+            
+        } else if (role === 'Branch Employee 11') {
+            issueHistoryTable.classList.add('hidden');
+            issuesTable.classList.remove('hidden');
+            rolesTable.classList.remove('hidden');
+            salesLeadsTable.classList.add('hidden');
+            submitForm.classList.add('hidden');
+            submitFormComments.classList.remove('hidden');
+            submitFormCategory.classList.add('hidden');
+            submitFormSalesLeads.classList.add('hidden');
+            newEntryForm.classList.remove('hidden');
+            var rows = issuesTable.getElementsByTagName('tr');
+            for (var i = 0; i < rows.length; i++) {
+                var branchEmployeeIDCell = rows[i].getElementsByTagName('td')[15]; // Assuming Branch Employee ID is the 16th column
+                if (branchEmployeeIDCell && branchEmployeeIDCell.innerText.trim() !== 'BrokerSideEmployee object (11)') {
+                    rows[i].classList.add('hidden'); // Hide rows where Branch Employee ID is not 11
+                } else {
+                    rows[i].classList.remove('hidden');
+                }
+            }
+        }
+    }
+
+    function addNewRow() {
+        var table = document.getElementById('issues-table');
+        var newRow = table.insertRow(table.rows.length); // Insert a new row at the end of the table
+        
+        // Add cells for each column
+        var columns = ['Priority', 'Comment', 'customer_name', 'number', 'broking ID', 'email ID', 'strategy code', 'strategy instrument', 'customer type', 'issue'];
+        for (var i = 0; i < columns.length; i++) {
+            var cell = newRow.insertCell(i);
+            cell.setAttribute('contenteditable', 'true'); // Allow editing for the new cells
+            cell.classList.add('editable-' + columns[i].toLowerCase().replace(/\s/g, '_')); // Add a class to identify editable cells
+        }
+    }
+    
+
+    function submitValues() {
+        var editableCells = document.querySelectorAll('.editable');
+        var updatedValues = {};
+    
+        // Iterate over all editable cells and gather their values
+        editableCells.forEach(function(cell) {
+            var issueId = cell.parentElement.querySelector('.issue-id').innerText.trim();
+            var newValue = cell.innerText.trim();
+            updatedValues[issueId] = newValue;
+        });
+    
+        // Serialize the updatedValues object and send it to the server
+        $.ajax({
+            url: '/update_employee_assigned_to/',
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            data: {
+                'updated_values': JSON.stringify(updatedValues)
+            },
+            success: function(response) {
+                console.log('Column updated successfully:', response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error updating column:', error);
+            }
+        });
+    }   
+    
+    function submitPriority() {
+        var editablePriorities = document.querySelectorAll('.editable-priority');
+        var updatedPriorities = {};
+    
+        editablePriorities.forEach(function(cell) {
+            var issueId = cell.parentElement.querySelector('.issue-id').innerText.trim();
+            var newValue = cell.innerText.trim();
+            updatedPriorities[issueId] = newValue;
+        });
+    
+        var csrftoken = getCookie('csrftoken');
+    
+        $.ajax({
+            url: '/update_priority/',
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            data: {
+                'updated_priorities': JSON.stringify(updatedPriorities)
+            },
+            success: function(response) {
+                console.log('Priority values updated successfully:', response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error updating priority values:', error);
+            }
+        });
+    }
+
+    function submitComments() {
+        var editableComments = document.querySelectorAll('.editable-comment');
+        var updatedComments = {};
+    
+        editableComments.forEach(function(cell) {
+            var issueId = cell.parentElement.querySelector('.issue-id').innerText.trim();
+            var newComment = cell.innerText.trim();
+            updatedComments[issueId] = newComment;
+        });
+    
+        document.getElementById('updated-comments').value = JSON.stringify(updatedComments);
+    
+        var csrftoken = getCookie('csrftoken');
+    
+        $.ajax({
+            url: '/update_comments/',
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            data: $('#update-comments-form').serialize(),
+            success: function(response) {
+                console.log('Comments updated successfully:', response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error updating comments:', error);
+            }
+        });
+    }    
+
+    function submitCategory() {
+        var editableCategories = document.querySelectorAll('.editable-category');
+        var updatedCategories = {};
+        
+        editableCategories.forEach(function(cell) {
+            var leadId = cell.parentElement.querySelector('.lead-id').innerText.trim(); // Corrected from '.issue-id'
+            var newCategory = cell.innerText.trim();
+            updatedCategories[leadId] = newCategory;
+        });
+    
+        document.getElementById('updated-categories').value = JSON.stringify(updatedCategories);
+    
+        var csrftoken = getCookie('csrftoken');
+    
+        $.ajax({
+            url: '/update_category/',
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            data: $('#update-category-form').serialize(),
+            success: function(response) {
+                console.log('Category updated successfully:', response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error updating category:', error);
+            }
+        });
+    }
+
+    function submitSalesLeads() {
+        var editableCells = document.querySelectorAll('.editable-salesleads');
+        var updatedData = {};
+
+        // Iterate over all editable cells and gather their values
+        editableCells.forEach(function(cell) {
+            var leadId = cell.parentElement.querySelector('.lead-id').innerText.trim();
+            var field = cell.getAttribute('data-field');
+            var value = cell.innerText.trim();
+            
+            if (!updatedData.hasOwnProperty(leadId)) {
+                updatedData[leadId] = {};
+            }
+            
+            updatedData[leadId][field] = value;
+        });
+
+        // Serialize the updatedData object and send it to the server
+        $.ajax({
+            url: '/update_sales_leads/',
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            data: {
+                'updated_data': JSON.stringify(updatedData)
+            },
+            success: function(response) {
+                console.log('Sales leads updated successfully:', response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error updating sales leads:', error);
+            }
+        });
+    }
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+</body>
+</html>
