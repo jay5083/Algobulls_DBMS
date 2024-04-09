@@ -1,0 +1,154 @@
+
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Employee Dashboard</title>
+</head>
+<body>
+<header>
+    <h1>Welcome Sales Employee!</h1>
+    <p>Your Employee ID is: {{ employee_id }}</p>
+    {% block content %}
+    <div>
+        <button onclick="showTables('Sales Employee')">Show Sales Leads</button>
+        <table id="sales-leads-table" class="hidden">
+            <thead>
+                <tr>
+                    <th>Lead ID</th>
+                    <th>Branch Employee ID</th>
+                    <th>Sales Employee ID</th>
+                    <th>Broking ID</th>
+                    <th>Name</th>
+                    <th>Contact Number</th>
+                    <th>Email ID</th>
+                    <th>Source Type</th>
+                    <th>Category</th>
+                    <th>Risk Appetite</th>
+                    <th>Comments</th>
+                    <th>Amount</th>
+                    <th>Purchase Date</th>
+                    <th>Status</th>
+                    <th>Reason For Dropped</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lead in sales_leads %}
+                <tr>
+                    <td>{{ lead.lead_id }}</td>
+                    <td>{{ lead.branch_employee_id }}</td>
+                    <td>{{ lead.sales_employee_id }}</td>
+                    <td>{{ lead.broking_id }}</td>
+                    <td>{{ lead.name }}</td>
+                    <td>{{ lead.contact_number }}</td>
+                    <td>{{ lead.email_id }}</td>
+                    <td>{{ lead.source_type }}</td>
+                    <td class="lead-id hidden">{{ lead.lead_id }}</td>
+                    <td class="editable-salesleads" data-field="category" contenteditable="true">{{ lead.category }}</td>
+                    <td class="editable-salesleads" data-field="risk_appetite" contenteditable="true">{{ lead.risk_appetite }}</td>
+                    <td class="editable-salesleads" data-field="comments" contenteditable="true">{{ lead.comments }}</td>
+                    <td class="editable-salesleads" data-field="amount" contenteditable="true">{{ lead.amount }}</td>
+                    <td class="editable-salesleads" data-field="purchase_date" contenteditable="true">{{ lead.purchase_date }}</td>
+                    <td class="editable-salesleads" data-field="status" contenteditable="true">{{ lead.status }}</td>
+                    <td class="editable-salesleads" data-field="reason_for_dropped" contenteditable="true">{{ lead.reason_for_dropped }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <form id="update-sales-leads-form" class="hidden" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="updated_data" id="updated-data">
+            <button type="button" onclick="submitSalesLeads()">Submit Sales Leads</button>
+        </form>
+
+    </div>
+    {% endblock content %}
+</header>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function showTables(role) {
+        var salesLeadsTable = document.getElementById('sales-leads-table');
+        var submitFormSalesLeads = document.getElementById('update-sales-leads-form');
+        var editableCells = document.querySelectorAll('.editable');
+        window.location.href = "{% url 'sales_employee_dashboard' %}";
+
+        if (role === 'Sales Employee') {
+            issueHistoryTable.classList.add('hidden');
+            issuesTable.classList.add('hidden');
+            rolesTable.classList.remove('hidden');
+            salesLeadsTable.classList.remove('hidden');
+            submitForm.classList.add('hidden');
+            submitFormComments.classList.add('hidden');
+            submitFormCategory.classList.add('hidden');
+            submitFormSalesLeads.classList.remove('hidden');
+            newEntryForm.classList.add('hidden');
+            var rows = salesLeadsTable.getElementsByTagName('tr');
+            for (var i = 0; i < rows.length; i++) {
+                var employeeIDCell = rows[i].getElementsByTagName('td')[2]; // Assuming Employee ID is the third column
+                if (employeeIDCell && employeeIDCell.innerText.trim() !== employee_id) {
+                    rows[i].classList.add('hidden');
+                } else {
+                    rows[i].classList.remove('hidden');
+                }
+            }
+            editableCells.forEach(function(cell) {
+                cell.contentEditable = true;
+            });
+        } 
+    }
+
+    function submitSalesLeads() {
+        var editableCells = document.querySelectorAll('.editable-salesleads');
+        var updatedData = {};
+
+        // Iterate over all editable cells and gather their values
+        editableCells.forEach(function(cell) {
+            var leadId = cell.parentElement.querySelector('.lead-id').innerText.trim();
+            var field = cell.getAttribute('data-field');
+            var value = cell.innerText.trim();
+            
+            if (!updatedData.hasOwnProperty(leadId)) {
+                updatedData[leadId] = {};
+            }
+            
+            updatedData[leadId][field] = value;
+        });
+
+        // Serialize the updatedData object and send it to the server
+        $.ajax({
+            url: '/update_sales_leads/',
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            data: {
+                'updated_data': JSON.stringify(updatedData)
+            },
+            success: function(response) {
+                console.log('Sales leads updated successfully:', response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error updating sales leads:', error);
+            }
+        });
+    }
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+</body>
+</html>

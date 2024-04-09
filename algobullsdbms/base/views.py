@@ -8,8 +8,13 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render
 from base.models import AlgobullsEmployee
+from django.shortcuts import render
+from base.models import SalesLeads, Issues  # Import SalesLeads model
+from django.views.decorators.csrf import csrf_exempt
 
-def home(request):
+
+
+def home(request, employee_id, role_name=None, name=None):
     roles = Roles.objects.all()  # Fetch all roles
     issue_histories = IssueHistory.objects.all()
     issues = Issues.objects.all()
@@ -20,6 +25,9 @@ def home(request):
         "issue_histories": issue_histories,
         "issues": issues,
         "sales_leads": sales_leads,
+        "employee_id": employee_id,
+        "role_name": role_name,
+        "name": name
     })
 
 def authView(request):
@@ -144,6 +152,8 @@ def update_category(request):
     else:
         return JsonResponse({'error': 'Invalid request method'})
 
+from datetime import datetime
+
 def update_sales_leads(request):
     if request.method == 'POST':
         updated_data_json = request.POST.get('updated_data')
@@ -157,6 +167,10 @@ def update_sales_leads(request):
             try:
                 lead = SalesLeads.objects.get(lead_id=lead_id)
                 for field, value in lead_data.items():
+                    if field == 'purchase_date':
+                        # Convert the date to "YYYY-MM-DD" format
+                        date_obj = datetime.strptime(value, '%b. %d, %Y')
+                        value = date_obj.strftime('%Y-%m-%d')
                     setattr(lead, field, value)
                 lead.save()
                 success_count += 1
@@ -166,7 +180,6 @@ def update_sales_leads(request):
         return JsonResponse({'success_count': success_count, 'error_count': error_count})
     else:
         return JsonResponse({'error': 'Invalid request method'})
-
 
 
 def create_new_entry(request):
@@ -204,3 +217,16 @@ def create_new_entry(request):
     # If the request method is not POST, return an error response
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
+def update_issues(request):
+    if request.method == 'POST':
+        try:
+            updated_issues = json.loads(request.POST.get('updated_issues'))
+            for issue_id, updated_values in updated_issues.items():
+                issue = Issues.objects.get(issue_id=issue_id)
+                for field, value in updated_values.items():
+                    setattr(issue, field, value)
+                issue.save()
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'Method not allowed'}, status=405)

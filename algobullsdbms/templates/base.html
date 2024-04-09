@@ -4,6 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Select Roles {% block title %}{% endblock title %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+    
+    
+
     <style>
         .hidden {
             display: none;
@@ -12,45 +16,76 @@
 </head>
 <body>
 <header>
-    <a href="#">Algobulls</a>
+    <style>
+        .navbar {
+            min-height: 50px; /* Adjust the value as needed */
+        }
+    </style>
+    
+    <nav class="navbar navbar-expand-lg bg-info" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Algobulls</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home
+                            <span class="visually-hidden">(current)</span>
+                        </a>
+                    </li>
+                </ul>
+                <!-- Replaced search form with provided HTML content -->
+                <div>
+                    <p style="font-size: 20px; color: white;">Hello,{{ name }}</p>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
     {% block content %}
     <div>
-        <nav aria-label="breadcrumb">
-            <ol>
-                <li>
-                    <a href="">Roles</a>
-                </li>
-                <li>
-                    Select Roles
-                </li>
-            </ol>
-        </nav>
-    </div>
-    <div>
-        <p>User Details:</p>
-        <p>Employee ID: {{ employee_id }}</p>
+        {% if role_name == 'Support Head' %}
+        <script>
+            // Call the showTables function when the page loads
+            window.onload = function() {
+              showTables('Support Head');
+            };
+        </script>
         <button onclick="showTables('Support Head')">Support Head</button>
+        {% elif role_name == 'Support Employee' %}
+        <script>
+            // Call the showTables function when the page loads
+            window.onload = function() {
+              showTables('Support Employee');
+            };
+        </script>
         <button onclick="showTables('Support Employee')">Support Employee</button>
-        <button onclick="showTables('Sales Head')">Sales Head</button>
-        <button onclick="showTables('Sales Employee 111')">Sales Employee 111</button>
-        <button onclick="showTables('Sales Employee 222')">Sales Employee 222</button>
-        <button onclick="showTables('Branch Employee 11')">Branch Employee 11</button>
-        <table id="roles-table" class="hidden">
-            <thead>
-                <tr>
-                    <th>Role ID</th>
-                    <th>Role Name</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for role in roles %}
-                    <tr>
-                        <td>{{ role.role_id }}</td>
-                        <td>{{ role.role_name }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        {% elif role_name == 'Sales Head' %}
+        <script>
+            // Call the showTables function when the page loads
+            window.onload = function() {
+              showTables('Sales Head');
+            };
+        </script>
+        {% elif role_name == 'Sales Employee' %}
+        <script>
+            // Call the showTables function when the page loads
+            window.onload = function() {
+              showTables('Sales Employee', '{{ employee_id }}');
+            };
+        </script>
+        {% elif role_name == 'Branch Employee' %}
+        <script>
+            // Call the showTables function when the page loads
+            window.onload = function() {
+              showTables('Branch Employee', '{{ employee_id }}');
+            };
+        </script>
+        {% endif %}
+
         <table id="issue-history-table" class="hidden">
             <thead>
                 <tr>
@@ -77,95 +112,96 @@
                 {% endfor %}
             </tbody>
         </table>
-        <table id="issues-table" class="hidden">
+        <table id="issues-table" class="hidden table table-hover">
             <!-- Issues Table Content -->
             <thead>
-                <tr>
-                    <th>Issue ID</th>
-                    <th>Division Assigned To</th>
-                    <th>Date</th>
-                    <th>Name</th>
-                    <th>Contact Number</th>
-                    <th>Broking ID</th>
-                    <th>Email ID</th>
-                    <th>Strategy Code</th>
-                    <th>Strategy Instrument</th>
-                    <th>Customer Type</th>
-                    <th>Priority</th>
-                    <th>Issue</th>
-                    <th>Comment</th>
-                    <th>Status</th>
-                    <th>Date of Closing</th>
-                    <th>Branch Employee ID</th>
-                    <th>Employee Assigned To</th>
-                    <th>Sales Employee Assigned To</th>
+                <tr class="table-info">
+                    <th scope="col">Issue ID</th>
+                    <th scope="col">Division Assigned To</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Contact Number</th>
+                    <th scope="col">Broking ID</th>
+                    <th scope="col">Email ID</th>
+                    <th scope="col">Strategy Code</th>
+                    <th scope="col">Strategy Instrument</th>
+                    <th scope="col">Customer Type</th>
+                    <th scope="col">Priority</th>
+                    <th scope="col">Issue</th>
+                    <th scope="col">Comment</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Date of Closing</th>
+                    <th scope="col">Branch Employee ID</th>
+                    <th scope="col">Employee Assigned To</th>
+                    <th scope="col">Sales Employee Assigned To</th>
                 </tr>
             </thead>
             <tbody>
                 {% for issue in issues %}
-                <tr>
-                    <td>{{ issue.issue_id }}</td>
+                <tr class="table-light">
+                    <td scope="row">{{ issue.issue_id }}</td>
                     <td>{{ issue.division_assigned_to }}</td>
                     <td>{{ issue.date }}</td>
-                    <td>{{ issue.name }}</td>
-                    <td>{{ issue.contact_number }}</td>
-                    <td>{{ issue.broking_id }}</td>
-                    <td>{{ issue.email_id }}</td>
-                    <td>{{ issue.strategy_code }}</td>
-                    <td>{{ issue.strategy_instrument }}</td>
-                    <td>{{ issue.customer_type }}</td>
-                    <td class="editable-priority" contenteditable="false">{{ issue.priority }}</td>
-                    <td class="editable-issue" contenteditable="true">{{ issue.issue }}</td>
-                    <td class="editable-comment" contenteditable="true">{{ issue.comment }}</td>
-                    <td class="editable-status" contenteditable="true">{{ issue.status }}</td>
-                    <td class="editable-date_of_closing" contenteditable="true">{{ issue.date_of_closing }}</td>
-                    <td class="editable-branch_employee_id" contenteditable="true">{{ issue.branch_employee_id }}</td>
+                    <td class="editable-10" contenteditable="false">{{ issue.name }}</td>
+                    <td class="editable-10" contenteditable="false">{{ issue.contact_number }}</td>
+                    <td class="editable-10" contenteditable="false">{{ issue.broking_id }}</td>
+                    <td class="editable-10" contenteditable="false">{{ issue.email_id }}</td>
+                    <td class="editable-10" contenteditable="false">{{ issue.strategy_code }}</td>
+                    <td class="editable-10" contenteditable="false">{{ issue.strategy_instrument }}</td>
+                    <td class="editable-10" contenteditable="false">{{ issue.customer_type }}</td>
+                    <td class="editable-5" contenteditable="false">{{ issue.priority }}</td>
+                    <td class="editable-10" contenteditable="false">{{ issue.issue }}</td>
+                    <td class="editable-6" contenteditable="false">{{ issue.comment }}</td>
+                    <td class="editable-7" contenteditable="false">{{ issue.status }}</td>
+                    <td class="editable-7" contenteditable="false">{{ issue.date_of_closing }}</td>
+                    <td class="editable-branch_employee_id" contenteditable="false">{{ issue.branch_employee_id.employee_id }}</td>
                     <td class="issue-id hidden">{{ issue.issue_id }}</td>
-                    <td class="editable" contenteditable="true">{{ issue.employee_assigned_to }}</td>
-                    <td class="editable-sales_employee_assigned_to" contenteditable="true">{{ issue.sales_employee_assigned_to }}</td>
+                    <td class="editable" contenteditable="false">{{ issue.employee_assigned_to.employee_id }}</td>
+                    <td class="editable-sales_employee_assigned_to" contenteditable="false">{{ issue.sales_employee_assigned_to }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <table id="sales-leads-table" class="hidden">
+        <table id="sales-leads-table" class="hidden table table-hover">
             <thead>
-                <tr>
-                    <th>Lead ID</th>
-                    <th>Branch Employee ID</th>
-                    <th>Sales Employee ID</th>
-                    <th>Broking ID</th>
-                    <th>Name</th>
-                    <th>Contact Number</th>
-                    <th>Email ID</th>
-                    <th>Source Type</th>
-                    <th>Category</th>
-                    <th>Risk Appetite</th>
-                    <th>Comments</th>
-                    <th>Amount</th>
-                    <th>Purchase Date</th>
-                    <th>Status</th>
-                    <th>Reason For Dropped</th>
+                <tr class="table-info">
+                    <th scope="col">Lead ID</th>
+                    <th scope="col">Branch Employee ID</th>
+                    <th scope="col">Sales Employee ID</th>
+                    <th scope="col">Broking ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Contact Number</th>
+                    <th scope="col">Email ID</th>
+                    <th scope="col">Source Type</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Risk Appetite</th>
+                    <th scope="col">Comments</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Purchase Date</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Reason For Dropped</th>
                 </tr>
             </thead>
             <tbody>
                 {% for lead in sales_leads %}
-                <tr>
-                    <td>{{ lead.lead_id }}</td>
-                    <td>{{ lead.branch_employee_id }}</td>
-                    <td>{{ lead.sales_employee_id }}</td>
-                    <td>{{ lead.broking_id }}</td>
-                    <td>{{ lead.name }}</td>
-                    <td>{{ lead.contact_number }}</td>
-                    <td>{{ lead.email_id }}</td>
-                    <td>{{ lead.source_type }}</td>
+                <tr class="table-light">
+                    <td scope="row">{{ lead.lead_id }}</td>
+                    <td >{{ lead.branch_employee_id.employee_id }}</td>
+                    <td class="editable-15" data-field="sales_employee_id.employee_id" contenteditable="false">{{ lead.sales_employee_id.employee_id }}</td>
+                    <td class="editable-12" data-field="broking_id" contenteditable="false">{{ lead.broking_id }}</td>
+                    <td class="editable-12" data-field="name" contenteditable="false">{{ lead.name }}</td>
+                    <td class="editable-12" data-field="contact_number" contenteditable="false">{{ lead.contact_number }}</td>
+                    <td class="editable-12" data-field="email_id" contenteditable="false">{{ lead.email_id }}</td>
+                    <td class="editable-12" data-field="source_type" contenteditable="false">{{ lead.source_type }}</td>
                     <td class="lead-id hidden">{{ lead.lead_id }}</td>
-                    <td class="editable-salesleads" data-field="category" contenteditable="true">{{ lead.category }}</td>
-                    <td class="editable-salesleads" data-field="risk_appetite" contenteditable="true">{{ lead.risk_appetite }}</td>
-                    <td class="editable-salesleads" data-field="comments" contenteditable="true">{{ lead.comments }}</td>
-                    <td class="editable-salesleads" data-field="amount" contenteditable="true">{{ lead.amount }}</td>
-                    <td class="editable-salesleads" data-field="purchase_date" contenteditable="true">{{ lead.purchase_date }}</td>
-                    <td class="editable-salesleads" data-field="status" contenteditable="true">{{ lead.status }}</td>
-                    <td class="editable-salesleads" data-field="reason_for_dropped" contenteditable="true">{{ lead.reason_for_dropped }}</td>
+                    <td class="editable-13" data-field="category" contenteditable="false">{{ lead.category }}</td>
+                    <td class="editable-13" data-field="risk_appetite" contenteditable="false">{{ lead.risk_appetite }}</td>
+                    <td class="editable-13" data-field="comments" contenteditable="false">{{ lead.comments }}</td>
+                    <td class="editable-14" data-field="amount" contenteditable="false">{{ lead.amount }}</td>
+                    <td class="editable-14" data-field="purchase_date" contenteditable="false">{{ lead.purchase_date }}</td>
+                    <td class="editable-14" data-field="status" contenteditable="true">{{lead.status}}</td>
+                                        
+                    <td class="editable-14" data-field="reason_for_dropped" contenteditable="false">{{ lead.reason_for_dropped }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -189,18 +225,19 @@
         <form id="update-sales-leads-form" class="hidden" method="post">
             {% csrf_token %}
             <input type="hidden" name="updated_data" id="updated-data">
-            <button type="button" onclick="submitSalesLeads()">Submit Sales Leads</button>
+            <button type="button" onclick="submitSalesLeads()" class="btn btn-success">Submit Sales Leads</button>
         </form>
         <form id="update-issues-form" class="hidden" method="post">
             {% csrf_token %}
             <input type="hidden" name="updated_issues" id="updated-data">
-            <button type="button" onclick="submitIssues()">Submit Issues</button>
+            <button type="button" onclick="submitIssues()" class="btn btn-success">Submit Issues</button>
         </form>
         <form id="new-entry-form" class="hidden" method="post">
             {% csrf_token %}
             <input type="hidden" name="updated_row" id="updated-data">
             <button type="button" onclick="addNewRow()">New Entry</button>
         </form>
+        
 
     </div>
     {% endblock content %}
@@ -208,7 +245,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    function showTables(role) {
+    function showTables(role, employee_id) {
         var issueHistoryTable = document.getElementById('issue-history-table');
         var issuesTable = document.getElementById('issues-table');
         var rolesTable = document.getElementById('roles-table');
@@ -217,19 +254,27 @@
         var submitFormComments = document.getElementById('update-comments-form');
         var submitFormCategory = document.getElementById('update-category-form');
         var submitFormSalesLeads = document.getElementById('update-sales-leads-form');
+        var submitFormIssues = document.getElementById('update-issues-form');
         var editableCells = document.querySelectorAll('.editable');
         var editablePriority = document.querySelectorAll('.editable-priority');
+        var editable5 = document.querySelectorAll('.editable-5');
+        var editable6 = document.querySelectorAll('.editable-6');
+        var editable10 = document.querySelectorAll('.editable-10');
+        var editable12 = document.querySelectorAll('.editable-12');
+        var editable13 = document.querySelectorAll('.editable-13');
+        var editable14 = document.querySelectorAll('.editable-14');
+        var editable15 = document.querySelectorAll('.editable-15');
         var newEntryForm = document.getElementById('new-entry-form');
 
         if (role === 'Support Head') {
             issueHistoryTable.classList.remove('hidden');
             issuesTable.classList.remove('hidden');
-            rolesTable.classList.remove('hidden');
             salesLeadsTable.classList.add('hidden');
             submitForm.classList.remove('hidden');
             submitFormCategory.classList.add('hidden');
             submitFormComments.classList.remove('hidden');
             submitFormSalesLeads.classList.add('hidden');
+            submitFormIssues.classList.remove('hidden');
             newEntryForm.classList.add('hidden');
             editableCells.forEach(function(cell) {
                 cell.contentEditable = true;
@@ -240,12 +285,12 @@
         } else if (role === 'Support Employee') {
             issueHistoryTable.classList.add('hidden');
             issuesTable.classList.remove('hidden');
-            rolesTable.classList.remove('hidden');
             salesLeadsTable.classList.add('hidden');
             submitForm.classList.add('hidden');
             submitFormComments.classList.remove('hidden');
             submitFormCategory.classList.add('hidden');
             submitFormSalesLeads.classList.add('hidden');
+            submitFormIssues.classList.add('hidden');
             newEntryForm.classList.add('hidden');
             editableCells.forEach(function(cell) {
                 cell.contentEditable = false;
@@ -253,81 +298,94 @@
         } else if (role === 'Sales Head') {
             issueHistoryTable.classList.add('hidden');
             issuesTable.classList.add('hidden');
-            rolesTable.classList.remove('hidden');
             salesLeadsTable.classList.remove('hidden');
             submitForm.classList.add('hidden');
             submitFormComments.classList.add('hidden');
-            submitFormCategory.classList.remove('hidden');
+            submitFormCategory.classList.add('hidden');
             submitFormSalesLeads.classList.remove('hidden');
+            submitFormIssues.classList.add('hidden');
             newEntryForm.classList.add('hidden');
             var rows = salesLeadsTable.getElementsByTagName('tr');
             for (var i = 0; i < rows.length; i++) {
                 rows[i].classList.remove('hidden'); // Show all rows
             }
-            editableCells.forEach(function(cell) {
+            editable13.forEach(function(cell) {
                 cell.contentEditable = true;
             });
-        } else if (role === 'Sales Employee 111') {
+            editable14.forEach(function(cell) {
+                cell.contentEditable = true;
+            });
+            editable15.forEach(function(cell) {
+                cell.contentEditable = true;
+            });
+        } else if (role === 'Sales Employee') {
             issueHistoryTable.classList.add('hidden');
             issuesTable.classList.add('hidden');
-            rolesTable.classList.remove('hidden');
             salesLeadsTable.classList.remove('hidden');
             submitForm.classList.add('hidden');
             submitFormComments.classList.add('hidden');
             submitFormCategory.classList.add('hidden');
             submitFormSalesLeads.classList.remove('hidden');
+            submitFormIssues.classList.add('hidden');
             newEntryForm.classList.add('hidden');
             var rows = salesLeadsTable.getElementsByTagName('tr');
             for (var i = 0; i < rows.length; i++) {
                 var employeeIDCell = rows[i].getElementsByTagName('td')[2]; // Assuming Employee ID is the third column
-                if (employeeIDCell && employeeIDCell.innerText.trim() !== 'AlgobullsEmployee object (111)') {
+                if (employeeIDCell && employeeIDCell.innerText.trim() !== employee_id) {
                     rows[i].classList.add('hidden');
                 } else {
                     rows[i].classList.remove('hidden');
                 }
             }
-            editableCells.forEach(function(cell) {
+            editable13.forEach(function(cell) {
                 cell.contentEditable = true;
             });
-        } else if (role === 'Sales Employee 222') {
+            editable14.forEach(function(cell) {
+                cell.contentEditable = true;
+            });
+        } else if (role === 'Branch Employee') {
             issueHistoryTable.classList.add('hidden');
-            issuesTable.classList.add('hidden');
-            rolesTable.classList.remove('hidden');
+            issuesTable.classList.remove('hidden');
             salesLeadsTable.classList.remove('hidden');
             submitForm.classList.add('hidden');
             submitFormComments.classList.add('hidden');
             submitFormCategory.classList.add('hidden');
             submitFormSalesLeads.classList.remove('hidden');
-            newEntryForm.classList.add('hidden');
-            var rows = salesLeadsTable.getElementsByTagName('tr');
-            for (var i = 0; i < rows.length; i++) {
-                var employeeIDCell = rows[i].getElementsByTagName('td')[2]; // Assuming Employee ID is the third column
-                if (employeeIDCell && employeeIDCell.innerText.trim() !== 'AlgobullsEmployee object (222)') {
-                    rows[i].classList.add('hidden'); // Hide rows where Employee ID is not 222
-                } else {
-                    rows[i].classList.remove('hidden');
-                }
-            }
-            
-        } else if (role === 'Branch Employee 11') {
-            issueHistoryTable.classList.add('hidden');
-            issuesTable.classList.remove('hidden');
-            rolesTable.classList.remove('hidden');
-            salesLeadsTable.classList.add('hidden');
-            submitForm.classList.add('hidden');
-            submitFormComments.classList.remove('hidden');
-            submitFormCategory.classList.add('hidden');
-            submitFormSalesLeads.classList.add('hidden');
+            submitFormIssues.classList.remove('hidden');
             newEntryForm.classList.remove('hidden');
             var rows = issuesTable.getElementsByTagName('tr');
             for (var i = 0; i < rows.length; i++) {
                 var branchEmployeeIDCell = rows[i].getElementsByTagName('td')[15]; // Assuming Branch Employee ID is the 16th column
-                if (branchEmployeeIDCell && branchEmployeeIDCell.innerText.trim() !== 'BrokerSideEmployee object (11)') {
+                if (branchEmployeeIDCell && branchEmployeeIDCell.innerText.trim() !== employee_id) {
                     rows[i].classList.add('hidden'); // Hide rows where Branch Employee ID is not 11
                 } else {
                     rows[i].classList.remove('hidden');
                 }
             }
+            var rows = salesLeadsTable.getElementsByTagName('tr');
+            for (var i = 0; i < rows.length; i++) {
+                var branchEmployeeIDCell = rows[i].getElementsByTagName('td')[1]; // Assuming Branch Employee ID is the 16th column
+                if (branchEmployeeIDCell && branchEmployeeIDCell.innerText.trim() !== employee_id) {
+                    rows[i].classList.add('hidden'); // Hide rows where Branch Employee ID is not 11
+                } else {
+                    rows[i].classList.remove('hidden');
+                }
+            }
+            editable5.forEach(function(cell) {
+                cell.contentEditable = true;
+            });
+            editable6.forEach(function(cell) {
+                cell.contentEditable = true;
+            });
+            editable10.forEach(function(cell) {
+                cell.contentEditable = true;
+            });
+            editable12.forEach(function(cell) {
+                cell.contentEditable = true;
+            });
+            editable13.forEach(function(cell) {
+                cell.contentEditable = true;
+            });
         }
     }
 
@@ -466,9 +524,9 @@
     }
 
     function submitSalesLeads() {
-        var editableCells = document.querySelectorAll('.editable-salesleads');
+        var editableCells = document.querySelectorAll('.editable-12, .editable-13, .editable-14, .editable-15');
         var updatedData = {};
-
+    
         // Iterate over all editable cells and gather their values
         editableCells.forEach(function(cell) {
             var leadId = cell.parentElement.querySelector('.lead-id').innerText.trim();
@@ -481,7 +539,7 @@
             
             updatedData[leadId][field] = value;
         });
-
+    
         // Serialize the updatedData object and send it to the server
         $.ajax({
             url: '/update_sales_leads/',
@@ -500,6 +558,60 @@
             }
         });
     }
+
+    function handleStatusChange(linkElement, status) {
+        var leadId = linkElement.closest('tr').querySelector('.lead-id').innerText.trim();
+        var statusCell = linkElement.closest('td');
+    
+        // Update the status cell with the selected value
+        statusCell.innerText = status;
+    
+        // Update the updatedData object with the new status value
+        if (updatedData.hasOwnProperty(leadId)) {
+            updatedData[leadId]['status'] = status;
+        } else {
+            updatedData[leadId] = {'status': status};
+        }
+    }
+    
+
+    function submitIssues() {
+        var editableCells = document.querySelectorAll('.editable-5, .editable-6, .editable-7, .editable-10');
+        var updatedData = {};
+    
+        // Iterate over all editable cells and gather their values
+        editableCells.forEach(function(cell) {
+            var issueId = cell.parentElement.querySelector('.issue-id').innerText.trim();
+            var field = cell.getAttribute('data-field');
+            var value = cell.innerText.trim();
+            
+            if (!updatedData.hasOwnProperty(issueId)) {
+                updatedData[issueId] = {};
+            }
+            
+            updatedData[issueId][field] = value;
+        });
+    
+        // Serialize the updatedData object and send it to the server
+        $.ajax({
+            url: '/update_issues/',
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            data: {
+                'updated_issues': JSON.stringify(updatedData)
+            },
+            success: function(response) {
+                console.log('Issues updated successfully:', response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error updating issues:', error);
+            }
+        });
+    }
+    
+    
 
     function getCookie(name) {
         var cookieValue = null;
