@@ -1,9 +1,47 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
-<form method="POST">
+<style>
+/* CSS styles for form container */
+.form-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 400px;
+    padding: 40px;
+    background-color: #287bb5; /* Change the background color to light blue */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 18px; /* Increase the font size of the form container */
+}
+
+/* Additional styles for login text */
+.login-text {
+    text-align: center;
+    margin-bottom: 20px; /* Add some space between the login text and the form */
+    font-size: 24px; /* Increase the font size of the login text */
+    color: #333;
+}
+
+/* Increase the font size of input fields and buttons */
+.form-container input[type="text"],
+.form-container input[type="password"],
+.form-container button {
+    font-size: 18px; /* Increase the font size of input fields and buttons */
+}
+
+/* Add margin between submit button and password field */
+.form-container button[type="submit"] {
+    margin-top: 15px; /* Adjust the margin as needed */
+}
+</style>
+
+<form method="POST" class="form-container">
     {% csrf_token %}
-    {{form}}
+    <div class="login-text">Login to your account</div>
+    {{ form }}
     <button type="submit">Submit</button>
-    </form>
+</form>
 {% endblock content %}

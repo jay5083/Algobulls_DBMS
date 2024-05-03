@@ -13,8 +13,8 @@ from base.models import SalesLeads, Issues  # Import SalesLeads model
 from django.views.decorators.csrf import csrf_exempt
 
 
-
-def home(request, employee_id, role_name=None, name=None):
+@login_required
+def home1(request, employee_id, role_name=None, name=None):
     roles = Roles.objects.all()  # Fetch all roles
     issue_histories = IssueHistory.objects.all()
     issues = Issues.objects.all()
@@ -27,19 +27,28 @@ def home(request, employee_id, role_name=None, name=None):
         "sales_leads": sales_leads,
         "employee_id": employee_id,
         "role_name": role_name,
-        "name": name
+        "name": name,
     })
+    
+@login_required
+def home(request):
+    # Fetch AlgobullsEmployee object corresponding to the currently logged-in user's email address
+    try:
+        algobulls_employee = AlgobullsEmployee.objects.get(email_id=request.user.username)
+        employee_id = algobulls_employee.employee_id
+    except AlgobullsEmployee.DoesNotExist:
+        employee_id = None
 
-def authView(request):
-    if request.method == "POST":
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            return redirect("home")
-    else:
-        form = AuthenticationForm()
-    return render(request, "registration/login.html", {"form": form})
+    # Fetch user groups
+    user_groups = request.user.groups.all()
+
+    # Pass user groups and employee ID to the template context
+    context = {
+        'user_groups': user_groups,
+        'employee_id': employee_id,
+    }
+
+    return render(request, 'home.html', context)
 
 def index(request):
     roles = Roles.objects.all()  # Fetch all roles

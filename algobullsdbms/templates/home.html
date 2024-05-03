@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+    
+</head>
+<body>
+    <header>
+        <style>
+            .navbar {
+                height: 70px !important; /* Set height of navbar */
+            }
+            .navbar-text {
+                margin-top: 10px;
+                margin-right: 10px; /* Adjust the spacing as needed */
+                color: white; /* Set text color */
+            }
+        </style>
+        
+        <nav class="navbar navbar-expand-lg bg-info" data-bs-theme="dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Algobulls</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                <span class="visually-hidden">(current)</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- Include employee ID and user groups here -->
+                    <div class="navbar-text">
+                        {% if employee_id %}
+                            <p class="navbar-text">Employee ID: {{ employee_id }}</p>
+                        {% else %}
+                            <p class="navbar-text">No employee ID found.</p>
+                        {% endif %}
+
+                        {% if user_groups %}
+                            <ul class="navbar-text">
+                                {% for group in user_groups %}
+                                    <li>{{ group.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="navbar-text">User is not assigned to any groups.</p>
+                        {% endif %}
+                    </div>
+                    <!-- End inclusion of employee ID and user groups -->
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!-- Other content of the home page -->
+</body>
+</html>

@@ -1,12 +1,13 @@
 # models.py
 from django.db import models
+from django.contrib.auth.models import Permission
 
 class AlgobullsDivision(models.Model):
     division_name = models.TextField(db_column='Division Name', primary_key=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
     head_id = models.ForeignKey('AlgobullsEmployee', models.DO_NOTHING, db_column='Head ID', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'Algobulls Division'
 
 
@@ -19,7 +20,7 @@ class AlgobullsEmployee(models.Model):
     role_id = models.ForeignKey('Roles', models.DO_NOTHING, db_column='Role ID', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'Algobulls Employee'
 
 
@@ -29,7 +30,7 @@ class Branch(models.Model):
     head_id = models.ForeignKey('BrokerSideEmployee', models.DO_NOTHING, db_column='Head ID', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'Branch'
 
 
@@ -42,7 +43,7 @@ class BrokerSideEmployee(models.Model):
     role_id = models.ForeignKey('Roles', models.DO_NOTHING, db_column='Role ID', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'Broker Side Employee'
 
 
@@ -52,7 +53,7 @@ class Brokers(models.Model):
     head_id = models.ForeignKey(BrokerSideEmployee, models.DO_NOTHING, db_column='Head ID', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'Brokers'
 
 
@@ -100,7 +101,7 @@ class Permission(models.Model):
     permission_name = models.TextField(db_column='Permission Name', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'Permission'
 
 
@@ -109,7 +110,7 @@ class PermissionAccessTable(models.Model):
     permission_id = models.ForeignKey(Permission, models.DO_NOTHING, db_column='Permission ID', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'Permission Access Table'
 
 
@@ -118,11 +119,17 @@ class Roles(models.Model):
     role_name = models.TextField(db_column='Role Name', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'Roles'
 
 
 class SalesLeads(models.Model):
+    
+    STATUS_CHOICES = {
+        "Done": "Done",
+        "ND": "Not Done",
+    }
+    
     lead_id = models.BigIntegerField(db_column='Lead ID', primary_key=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
     branch_employee_id = models.ForeignKey(BrokerSideEmployee, models.DO_NOTHING, db_column='Branch Employee ID', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
     sales_employee_id = models.ForeignKey(AlgobullsEmployee, models.DO_NOTHING, db_column='Sales Employee ID', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
@@ -136,9 +143,9 @@ class SalesLeads(models.Model):
     comments = models.TextField(db_column='Comments', blank=True, null=True)  # Field name made lowercase.
     amount = models.BigIntegerField(db_column='Amount', blank=True, null=True)  # Field name made lowercase.
     purchase_date = models.DateField(db_column='Purchase Date', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    status = models.TextField(db_column='Status', blank=True, null=True)  # Field name made lowercase.
+    status = models.TextField(db_column='Status', choices=STATUS_CHOICES, blank=True, null=True)  # Field name made lowercase.
     reason_for_dropped = models.TextField(db_column='Reason For Dropped', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'Sales Leads'

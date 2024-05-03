@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.views import View
-from base.views import index, home
+from base.views import index, home1
 import json
 from django.http import JsonResponse
 from django.contrib.auth.models import User
@@ -36,7 +36,7 @@ class LoginView(View):
                     name = broker_user.name
                     # Authentication successful
                     # Redirect to home page with employee_id and role_name
-                    return redirect('base:home', employee_id=employee_id, role_name=role_name, name=name)
+                    return redirect('base:home1', employee_id=employee_id, role_name=role_name, name=name)
             else:
                 # If user found in AlgobullsEmployee table
                 employee_id = user.employee_id
@@ -45,7 +45,7 @@ class LoginView(View):
                 print(name)
                 # Authentication successful
                 # Redirect to home page with employee_id and role_name
-                return redirect('base:home', employee_id=employee_id, role_name=role_name, name=name)
+                return redirect('base:home1', employee_id=employee_id, role_name=role_name, name=name)
                 
         # Redirect back to login page on authentication failure
         return redirect('login')

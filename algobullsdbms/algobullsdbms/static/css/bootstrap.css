@@ -40,7 +40,7 @@
   --bs-primary: #3459e6;
   --bs-secondary: #fff;
   --bs-success: #2fb380;
-  --bs-info: #287bb5;
+  --bs-info: hsl(205, 64%, 43%);
   --bs-warning: #f4bd61;
   --bs-danger: #da292e;
   --bs-light: #f8f9fa;
@@ -188,6 +188,19 @@
   --bs-form-invalid-color: #e97f82;
   --bs-form-invalid-border-color: #e97f82;
 }
+
+.form-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 400px;
+  padding: 20px;
+  background-color: #f7f7f7;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
 
 *,
 *::before,
@@ -12270,3 +12283,4 @@ thead th {
 .modal-content {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
+
